@@ -1,0 +1,18 @@
+{
+    "name": "Genderfluid Pronoun Updater",
+    "description": "Update your pronouns on Discord, Facebook, (and more) with ease",
+    "version": "0.1",
+    "manifest_version": 3,
+
+    "background": {
+        "service_worker": "background.js"
+    },
+
+    "action": {
+        "default_popup": "app/popup.html"
+    },
+
+    "permissions": [ 
+        "storage"
+    ]
+}
