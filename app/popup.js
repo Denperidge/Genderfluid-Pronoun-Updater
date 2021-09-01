@@ -1,23 +1,55 @@
 // Facebook url: https://www.facebook.com/profile.php?sk=about_contact_and_basic_info
 
 function SetPronouns(e) {
-    var mainPronoun = this.value[0].toLowerCase();
-    SetOnFacebook(mainPronoun);
+    var gendercode = this.value[0].toLowerCase();
+    /*chrome.permissions.request({
+        permissions: ["scripting"],
+        origins: ["https://www.facebook.com/"]});*/
+    SetOnFacebook(gendercode);
 
 }
 
-function SetOnFacebook(mainPronoun) {
-    console.log(mainPronoun)
-    chrome.tabs.create({
-        url: "https://www.facebook.com/profile.php?sk=about_contact_and_basic_info"
-    }).then((tab) => {
-        var tabId = tab.id;
-        
-        console.log(tab);
-    }, (err) => {
-        console.error(err);
-    });
+function SetOnFacebook(gendercode) {
+    chrome.permissions.request({
+        origins: ["https://www.facebook.com/profile.php"]
+    }, (granted) => {
+        console.log(granted)
+        if (!granted) {
+            console.error("EYRTDG");
+            return;
+        } else {
+            console.error("YAY");
+        }
+
+        console.log(gendercode)
+        chrome.tabs.create({
+            url: "https://www.facebook.com/profile.php?sk=about_contact_and_basic_info"
+        }).then((tab) => {
+            let tabId = tab.id;
     
+            /*
+            chrome.scripting.executeScript({
+                target: {tabId: tabId},
+                func: () => {
+                    var gendercode = "n";
+                }
+            });
+            */
+    
+    
+            chrome.scripting.executeScript({
+                target: {tabId: tabId},
+                files: ["/app/integrations/facebook.js"]//,
+                //args: [ gendercode ]
+            });
+            
+            console.log(tab);
+        }, (err) => {
+            console.error(err);
+        });    
+    });
+
+   
 }
 
 

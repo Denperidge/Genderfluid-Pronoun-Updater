@@ -12,7 +12,13 @@
         "default_popup": "app/popup.html"
     },
 
+
+
     "permissions": [ 
-        "storage"
+        "storage",
+        "scripting"
+    ],
+    "host_permissions": [
+        "<all_urls>"
     ]
 }
