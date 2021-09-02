@@ -10,31 +10,33 @@ function SetPronouns(e) {
 
 }
 
-var fbTabId;
-function SetOnFacebook(gendercode) {
+// Requests permission, opens the tab, and runs the callback with the tab object
+function OpenTab(url, callback) {
     chrome.permissions.request({
-        origins: ["https://www.facebook.com/profile.php"]
+        origins: [url]
     }, (granted) => {
-        console.log(granted)
         if (!granted) {
-            console.error("EYRTDG");
-            return;
-        } else {
-            console.error("YAY");
+            console.error("Permission for url not granted!");
+            callback(false);
         }
 
-        console.log(gendercode)
         chrome.tabs.create({
-            url: "https://www.facebook.com/profile.php?sk=about_contact_and_basic_info"
+            url: url
         }).then((tab) => {
-            fbTabId = tab.id;
-
-            
+            callback(tab)
         }, (err) => {
             console.error(err);
         });    
     });
+}
 
+
+var fbTabId;
+function SetOnFacebook(gendercode) {
+    OpenTab("https://www.facebook.com/profile.php?sk=about_contact_and_basic_info",
+        (tab) => {
+            fbTabId = tab.id;
+        })
    
 }
 

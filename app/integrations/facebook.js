@@ -5,9 +5,9 @@ function FacebookIntegration(gendercode) {
     var editGenderSelectboxSelector= "div > div > div:nth-child(1) > div > div > div > div > div > div > div > div > div > div > div > div > div:nth-child(1) > div > div > div > div > div > div > div > div > div:nth-child(3) > div:nth-child(2) > div > div:nth-child(4) > div:nth-child(2) > div";
 
     // For selector syntax with startswith/endswith https://stackoverflow.com/a/8714421
-    var mOptionSelector = "div[id^=jsc][id$='1']";
-    var fOptionSelector = "div[id^=jsc][id$='0']";
-    var nOptionSelector = "div[id^=jsc][id$='2']";
+    var mOptionSelector = "div[id^='jsc'][id$='1']";
+    var fOptionSelector = "div[id^='jsc'][id$='0']";
+    var nOptionSelector = "div[id^='jsc'][id$='2']";
     
     var saveButtonSelector = "div > div > div:nth-child(1) > div > div > div > div > div > div > div > div > div > div > div > div > div:nth-child(1) > div > div > div > div > div > div > div > div > div:nth-child(3) > div:nth-child(2) > div > div > div > div:nth-child(2)";
 
@@ -27,7 +27,7 @@ function FacebookIntegration(gendercode) {
                 var optionSelector;
                 if (gendercode == "m") optionSelector = mOptionSelector;
                 else if (gendercode == "f") optionSelector = fOptionSelector;
-                else option = nOptionSelector;
+                else optionSelector = nOptionSelector;
         
                 console.log("Clicking option...");
                 console.log(optionSelector);
