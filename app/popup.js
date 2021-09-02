@@ -47,40 +47,23 @@ chrome.tabs.onActivated.addListener((activationInfo) => {
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (tabId != fbTabId) {
-        console.log("Updated, but not facebook")
-        return;
-    }
 
-    console.log(changeInfo.status)
-
+    // Whether an action has to be undertook or not, it requires the tab to be done loading
     if (changeInfo.status != "complete") {
-        console.log("Updated, but not complete: " + changeInfo.status)
+        console.log("Updated, but not complete");
+        console.log(tab);
+        console.log(changeInfo);
         return;
     }
 
-    console.log("Facebook complete!")
-
-    console.log(gendercode)
-
-
-    
-    chrome.scripting.executeScript({
-        target: {tabId: tabId},
-        func: FacebookIntegration,
-        args: [gendercode]
-        
-    });
-
-
-    return;
-    chrome.scripting.executeScript({
-        target: {"tabId": tabId},
-        files: ["/app/integrations/facebook.js"]//,
-        //args: [ gendercode ]
-    });
-    
-    console.log(tab);
+    if (tabId == fbTabId) {
+        chrome.scripting.executeScript({
+            target: {tabId: tabId},
+            func: FacebookIntegration,
+            args: [gendercode]
+            
+        });
+    }
 });
 
 
