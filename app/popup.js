@@ -1,8 +1,8 @@
 // Facebook url: https://www.facebook.com/profile.php?sk=about_contact_and_basic_info
 
 var gendercode;
-var mainPronoun;
-var pronouns;
+var pronouns = "";
+var oldPronouns = "";
 
 // From the input box, get the main pronoun (the one that one-pronoun services will default to)
 function ConfigurePronouns(e) {
@@ -40,8 +40,17 @@ function ConfigurePronouns(e) {
 
 function SetPronouns(e) {
     gendercode = $("input[name='mainPronoun']:checked").val().toLowerCase()[0];
-    SetOnFacebook();
-    SetOnDiscord();
+    chrome.storage.sync.get(['oldPronouns'], (result) => {
+        oldPronouns = result.oldPronouns;
+        SetOnFacebook();
+        SetOnDiscord();
+        // Save the newly set pronouns to be able to remove them later
+        chrome.storage.sync.set({oldPronouns: pronouns}, () => {
+            console.log("Pronouns saved: " + pronouns)
+        });
+    });
+    
+    
 }
 
 // Requests permission, opens the tab, and runs the callback with the tab object
@@ -100,6 +109,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         return;
     }
 
+    console.log(oldPronouns)
+
     if (tabId == fbTabId) {
         chrome.scripting.executeScript({
             target: {tabId: tabId},
@@ -110,8 +121,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     } else if (tabId == discordTabId) {
         chrome.scripting.executeScript({
             target: {tabId: tabId},
-            func: FacebookIntegration,
-            args: [valu]
+            func: DiscordStatusIntegration,
+            args: [pronouns, oldPronouns]
             
         });
     }
