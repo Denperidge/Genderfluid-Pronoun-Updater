@@ -1,7 +1,10 @@
 
-let color = "#3AA757"
-
 chrome.runtime.onInstalled.addListener(() => {
-    chrome.storage.sync.set({color});
-    console.log("Default set to %cgreen", `color: ${color}`)
+    chrome.storage.sync.set({
+        "oldPronouns": "",
+        "integrations": {
+            "facebook": false,
+            "discordStatus": false
+        }
+    });
 });

@@ -11,6 +11,8 @@
     "action": {
         "default_popup": "app/popup.html"
     },
+    
+    "options_page": "app/options.html",
 
 
 

@@ -3,6 +3,29 @@
 var gendercode;
 var pronouns = "";
 var oldPronouns = "";
+var integrations = {}
+
+
+chrome.storage.sync.get(['oldPronouns', 'integrations'], (result) => {
+    oldPronouns = result.oldPronouns;
+    integrations = result.integrations;
+    
+    // Make sure at least *one* integration is enabled
+    var oneIntegrationEnabled = false;
+    var integrationKeys = Object.keys(integrations);
+    for (var i = 0; i < integrationKeys.length; i++) {
+        if (integrations[integrationKeys[i]] == true) {
+            oneIntegrationEnabled = true;
+            break;
+        } 
+    }
+    if (!oneIntegrationEnabled) {
+        document.getElementById("message").innerText = "You have to enable at least one integration in the options before using this (right-click the extension icon and press options!)"
+    }
+
+
+
+});
 
 // From the input box, get the main pronoun (the one that one-pronoun services will default to)
 function ConfigurePronouns(e) {
@@ -42,8 +65,8 @@ function SetPronouns(e) {
     gendercode = $("input[name='mainPronoun']:checked").val().toLowerCase()[0];
     chrome.storage.sync.get(['oldPronouns'], (result) => {
         oldPronouns = result.oldPronouns;
-        SetOnFacebook();
-        SetOnDiscord();
+        if (integrations.facebook) SetOnFacebook();
+        if (integrations.discordStatus) SetOnDiscord();
         // Save the newly set pronouns to be able to remove them later
         chrome.storage.sync.set({oldPronouns: pronouns}, () => {
             console.log("Pronouns saved: " + pronouns)
