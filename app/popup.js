@@ -123,8 +123,15 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             target: {tabId: tabId},
             func: DiscordStatusIntegration,
             args: [pronouns, oldPronouns]
-            
         });
+    }
+});
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log(message)
+    console.log(sender)
+    if (message.toLowerCase() == "close") {
+        chrome.tabs.remove(sender.tab.id);
     }
 });
 

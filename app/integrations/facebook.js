@@ -37,6 +37,10 @@ function FacebookIntegration(gendercode) {
                     console.log("Clicking save...");
                     console.log(saveButtonSelector);
                     document.querySelector(saveButtonSelector).click();
+
+                    setTimeout(() => {
+                        chrome.runtime.sendMessage("close");
+                    }, 500);
                 }, 500)
             }); 
         }, 500)

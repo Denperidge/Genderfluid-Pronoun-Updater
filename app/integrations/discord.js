@@ -45,6 +45,9 @@ function DiscordStatusIntegration(pronouns, oldPronouns) {
                     setTimeout(() => {
                         console.log(document.querySelectorAll(saveButtonSelector)[saveButtonIndex])
                         document.querySelectorAll(saveButtonSelector)[saveButtonIndex].click();
+                        setTimeout(() => {
+                            chrome.runtime.sendMessage("close");
+                        }, 500);
                     }, 500);
                 }, 500);
             }, 500);
