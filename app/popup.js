@@ -1,13 +1,47 @@
 // Facebook url: https://www.facebook.com/profile.php?sk=about_contact_and_basic_info
 
 var gendercode;
-function SetPronouns(e) {
-    gendercode = this.value[0].toLowerCase();
-    /*chrome.permissions.request({
-        permissions: ["scripting"],
-        origins: ["https://www.facebook.com/"]});*/
-    SetOnFacebook(gendercode);
+var mainPronoun;
+var pronouns;
 
+// From the input box, get the main pronoun (the one that one-pronoun services will default to)
+function ConfigurePronouns(e) {
+    pronouns = e.target.value;  // Example value: (She/They)
+    console.log(pronouns)
+
+    var selector = "input[name=mainPronoun][value={0}]";
+
+
+    try {
+// Auto select radiobutton
+        var firstPronoun = pronouns.match(/[a-z]+/i)[0];  // Example value: She
+        switch (firstPronoun[0].toLowerCase()) {
+            case "m":
+            case "h":
+                selector = selector.replace("{0}", "m");
+                break;
+            case "f":
+            case "z":
+            case "s":
+                selector = selector.replace("{0}", "f");
+                break;
+            
+            default:
+                selector = selector.replace("{0}", "n");
+                break;
+        }
+        $(selector).prop("checked", true);
+    }
+    catch {
+        console.log("Not enough info for autoselecting main pronoun")
+    }
+    
+}
+
+function SetPronouns(e) {
+    gendercode = $("input[name='mainPronoun']:checked").val().toLowerCase()[0];
+    SetOnFacebook();
+    SetOnDiscord();
 }
 
 // Requests permission, opens the tab, and runs the callback with the tab object
@@ -32,12 +66,20 @@ function OpenTab(url, callback) {
 
 
 var fbTabId;
-function SetOnFacebook(gendercode) {
+function SetOnFacebook() {
     OpenTab("https://www.facebook.com/profile.php?sk=about_contact_and_basic_info",
         (tab) => {
             fbTabId = tab.id;
         })
    
+}
+
+var discordTabId;
+function SetOnDiscord() {
+    OpenTab("https://discord.com/channels/@me",
+        (tab) => {
+            discordTabId = tab.id;
+        });
 }
 
 chrome.tabs.onActivated.addListener((activationInfo) => {
@@ -65,12 +107,20 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             args: [gendercode]
             
         });
+    } else if (tabId == discordTabId) {
+        chrome.scripting.executeScript({
+            target: {tabId: tabId},
+            func: FacebookIntegration,
+            args: [valu]
+            
+        });
     }
 });
 
 
 
 $("button").click(SetPronouns);
+$("input[type='text']").keyup(ConfigurePronouns).click(ConfigurePronouns).blur(ConfigurePronouns);
 
 /*
 var pronounButtons = document.getElementsByClassName("pronouns");
