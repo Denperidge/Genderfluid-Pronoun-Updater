@@ -11,34 +11,28 @@ function FacebookIntegration(gendercode) {
     
     var saveButtonSelector = "div > div > div:nth-child(1) > div > div > div > div > div > div > div > div > div > div > div > div > div:nth-child(1) > div > div > div > div > div > div > div > div > div:nth-child(3) > div:nth-child(2) > div > div > div > div:nth-child(2)";
 
-
-    setTimeout(()=>{
-        console.log("Clicking edit...")
-        document.querySelector(editGenderButtonSelector).click();
-        console.log(editGenderButtonSelector);
-
-
-        setTimeout(()=> {
+    ChainTimeout(500,
+        () => {
+            console.log("Clicking edit...")
+            document.querySelector(editGenderButtonSelector).click();
+            console.log(editGenderButtonSelector);
+        }, () => {
             console.log("Clicking select...")
             document.querySelector(editGenderSelectboxSelector).click();
             console.log(editGenderSelectboxSelector);
-
-            setTimeout(() => {
-                var optionSelector;
-                if (gendercode == "m") optionSelector = mOptionSelector;
-                else if (gendercode == "f") optionSelector = fOptionSelector;
-                else optionSelector = nOptionSelector;
+        }, () => {
+            var optionSelector;
+            if (gendercode == "m") optionSelector = mOptionSelector;
+            else if (gendercode == "f") optionSelector = fOptionSelector;
+            else optionSelector = nOptionSelector;
         
-                console.log("Clicking option...");
-                console.log(optionSelector);
-                document.querySelector(optionSelector).click();
-
-                setTimeout(() => {
-                    console.log("Clicking save...");
-                    console.log(saveButtonSelector);
-                    document.querySelector(saveButtonSelector).click();
-                }, 500)
-            }); 
-        }, 500)
-    }, 500)
+            console.log("Clicking option...");
+            console.log(optionSelector);
+            document.querySelector(optionSelector).click();
+        }, () => {
+            console.log("Clicking save...");
+            console.log(saveButtonSelector);
+            document.querySelector(saveButtonSelector).click();
+        },
+    );
 }
