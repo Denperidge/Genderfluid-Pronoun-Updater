@@ -32,7 +32,8 @@ function DiscordStatusIntegration(pronouns, oldPronouns) {
 
                     var oldValue = input.value;
 
-                    var newValue = oldValue + " " + pronouns;
+                    // Remove the old pronouns, set 
+                    var newValue = oldValue.replace(" " + oldPronouns, "") + " " + pronouns;
 
                     // React input solution from https://stackoverflow.com/a/46012210
                     var nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
