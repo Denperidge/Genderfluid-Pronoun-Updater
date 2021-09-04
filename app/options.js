@@ -12,3 +12,10 @@ $("input[type=checkbox]").change((e) => {
         "integrations": integrations
     });
 });
+
+$("#reminder").change((e) => {
+    console.log(e);
+    chrome.storage.sync.set({
+        "reminderInterval": e.target.value
+    });
+});
