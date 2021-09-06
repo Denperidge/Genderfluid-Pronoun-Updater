@@ -1,10 +1,18 @@
 var integrations;
-chrome.storage.sync.get(['integrations'], (result) => {
+chrome.storage.sync.get(["integrations", "reminderInterval"], (result) => {
     integrations = result.integrations;
+
+    var integrationKeys = Object.keys(integrations);
+    for (var i = 0; i < integrationKeys.length; i++) {
+        var key = integrationKeys[i];
+        $(`[name=${key}]`).prop("checked", integrations[key])
+    }
+
+    $("#reminderInterval").val(result.reminderInterval);
 });
 
 
-$("input[type=checkbox]").change((e) => {
+$(".integration").change((e) => {
     var target = e.target;
     integrations[target.name] = target.checked;
 
@@ -13,7 +21,7 @@ $("input[type=checkbox]").change((e) => {
     });
 });
 
-$("#reminder").change((e) => {
+$("#reminderInterval").change((e) => {
     console.log(e);
     chrome.storage.sync.set({
         "reminderInterval": e.target.value
