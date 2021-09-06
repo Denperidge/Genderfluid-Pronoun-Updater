@@ -10,7 +10,7 @@ This (Chrome) browser extension is made to facilitate the online lives of Gender
 ## Installing
 While a Chrome Web Store link will be added down the line, the extension can be installed from here too!
 
-- Press the [Download ZIP button](../../archive/refs/heads/master.zip) in this README or on the repository page and unzip it somewhere on your computer.
+- Press the [download ZIP button](https://github.com/Denperidge/Genderfluid-Pronoun-Updater/archive/refs/heads/main.zip) in this README or on the repository page and unzip it somewhere on your computer.
 - Navigate to `chrome://extensions`.
 - Enable developer mode using the toggle on the right-top of the screen.
 - Press `Load Unpacked`, navigate to the extracted folder, and load it in, done!
