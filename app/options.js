@@ -21,6 +21,8 @@ $(".integration").change((e) => {
     });
 });
 
+// TODO remove host permissions after the integration gets disabled 
+
 $("#reminderInterval").change((e) => {
     console.log(e);
     chrome.storage.sync.set({

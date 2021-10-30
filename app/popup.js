@@ -82,23 +82,42 @@ $("button").click(SetPronouns);
 
 // Requests permission, opens the tab, and runs the callback with the tab object
 function OpenTab(url, callback) {
-    // TODO check if permission has already been granted
-    chrome.permissions.request({
+    // Check if permission for the url has already been granted
+    chrome.permissions.contains({
         origins: [url]
-    }, (granted) => {
-        if (!granted) {
-            console.error("Permission for url not granted!");
-            callback(false);
+    }, (permissionAlreadyGranted) => {
+        // If thats the case, open tab
+        if (permissionAlreadyGranted) {
+            _OpenTab(url, callback);
         }
-
-        chrome.tabs.create({
-            url: url
-        }).then((tab) => {
-            callback(tab)
-        }, (err) => {
-            console.error(err);
-        });    
+        // If permission hasn't already been granted, request it
+        else {
+            chrome.permissions.request({
+                origins: [url]
+            }, (granted) => {
+                // If it has been granted at this point, open tab
+                if (granted) {
+                    _OpenTab(url, callback);
+                }
+                // If it still hasn't been granted, error (TODO visual feedback)
+                else {
+                    console.error("Permission for url not granted!");
+                    callback(false);
+                }
+            });
+        }
     });
+    
+}
+// Function for internal use in OpenTab
+function _OpenTab(url, callback) {
+    chrome.tabs.create({
+        url: url
+    }).then((tab) => {
+        callback(tab)
+    }, (err) => {
+        console.error(err);
+    });    
 }
 
 
