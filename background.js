@@ -6,7 +6,8 @@ chrome.runtime.onInstalled.addListener(() => {
         "lastReminder": Date.now(),
         "integrations": {
             "facebook": false,
-            "discordStatus": false
+            "discordStatus": false,
+            "github": false
         }
     });
 });

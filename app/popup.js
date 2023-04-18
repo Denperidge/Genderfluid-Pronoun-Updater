@@ -72,6 +72,7 @@ function SetPronouns(e) {
         oldPronouns = result.oldPronouns;
         if (integrations.facebook) SetOnFacebook();
         if (integrations.discordStatus) SetOnDiscord();
+        if (integrations.github) SetOnGithub();
         // Save the newly set pronouns to be able to remove them later
         chrome.storage.sync.set({oldPronouns: pronouns}, () => {
             console.log("Pronouns saved: " + pronouns)
@@ -139,6 +140,13 @@ function SetOnDiscord() {
         });
 }
 
+var githubTabId;
+function SetOnGithub() {
+    OpenTab("https://github.com/settings/profile",
+        (tab) => {
+            githubTabId = tab.id;
+        });
+}
 /* Used during debug
 chrome.tabs.onActivated.addListener((activationInfo) => {
     
@@ -178,6 +186,14 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             target: {tabId: tabId},
             func: DiscordStatusIntegration,
             args: [pronouns, oldPronouns]
+        });
+    }
+    // If github is done loading, run github script
+    else if (tabId == discordTabId) {
+        chrome.scripting.executeScript({
+            target: {tabId: tabId},
+            func: GithubIntegration,
+            args: [pronouns]
         });
     }
 });
